@@ -50,6 +50,7 @@ def inputAnalysisGameRegime_1(number):
                 print("Згідно ваших попередніх відповідей, ваше число: " + str(maxNumber))
                 win()
 
+
 def inputAnalysisGameRegime_2(num, targetNum):
         if num < targetNum:
                 print("Ні, моє число більше!")
@@ -85,7 +86,14 @@ def win():
 while game:
         
         if gameRegime == "1":
-                possibleNumber = random.randint(minNumber + 1, maxNumber - 1)
+                
+                if minNumber + 1 != maxNumber - 1:
+                        possibleNumber = random.randint(minNumber + 1, maxNumber - 1)
+
+                else:
+                        print("Згідно ваших попередніх відповідей, ваше число: " + str(maxNumber - 1))
+                        win()
+                
                 print(possibleNumberMessage + str(possibleNumber) + " ?")
 
                 inputAnalysisGameRegime_1(possibleNumber)
