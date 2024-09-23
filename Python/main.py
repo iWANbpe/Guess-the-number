@@ -10,45 +10,28 @@ maxNumber = 101
 
 myNumber = random.randint(0, 100)
 
-print(greetingsMessage)
-gameRegime = input()     
-
-if gameRegime == "1":
-        print(rules1)
-elif gameRegime == "2":
-        print(rules2)
+#Functions
 
 def inputAnalysisGameRegime_1(number):
         global minNumber, maxNumber, game
 
         playerResponse = input()
-        while True:
+        while game:
                 if playerResponse.lower() == "б":
-                        minNumber = number
+                        minNumber = number + 1
                         break
                         
                 elif playerResponse.lower() == "м":
-                        maxNumber = number
+                        maxNumber = number - 1
                         break
 
                 elif playerResponse.lower() == "так":
                         win()
                         break
                 
-                elif playerResponse == filename:
-                        print(filename)
-                        playerResponse = input()
-
-                elif playerResponse.lower() == exitCommand:
-                        game = False
-                        break
                 else:
-                        print(invalidInputMessage)
-                        playerResponse = input()
-
-        if(minNumber == maxNumber):
-                print("Згідно ваших попередніх відповідей, ваше число: " + str(maxNumber))
-                win()
+                        commandCall(playerResponse)
+                        if game: playerResponse = input()
 
 
 def inputAnalysisGameRegime_2(num, targetNum):
@@ -62,8 +45,23 @@ def inputAnalysisGameRegime_2(num, targetNum):
                 print("Так, це моє число!")
                 win()
 
+def commandCall(command):
+        global game, filename, exitCommand, invalidInputMessage, rulesMessage, rulesCommand
+        
+        if command == filename:
+                print(filename)
+                
+        elif command.lower() == exitCommand:
+                game = False
+                
+        elif command == rulesCommand:
+                print(rulesMessage)
+                
+        else:
+                print(invalidInputMessage)
+
 def win():
-        global gameRegime, turnsCount
+        global gameRegime, turnsCount, minNumber, maxNumber, myNumber
 
         if gameRegime == "1":
                 print(programWinMessage + str(turnsCount))
@@ -77,28 +75,25 @@ def win():
         turnsCount = 0
         print("Зараз ви можете обрати інший режим гри, чи продовжити гру в тому самому. Оберіть 1, 2 або вихід")
         gameRegime = input()
+        
+#Game
 
-        if gameRegime == "1":
-                print(rules1)
-        elif gameRegime == "2":
-                print(rules2)
+print(greetingsMessage)
+gameRegime = input()     
 
 while game:
-        
         if gameRegime == "1":
                 
-                if minNumber + 1 != maxNumber - 1:
-                        possibleNumber = random.randint(minNumber + 1, maxNumber - 1)
-
-                else:
-                        print("Згідно ваших попередніх відповідей, ваше число: " + str(maxNumber - 1))
-                        win()
+                if minNumber != maxNumber and minNumber < maxNumber:
+                        turnsCount += 1
+                        possibleNumber = random.randint(minNumber, maxNumber)
+                        print(possibleNumberMessage + str(possibleNumber) + " ?")
+                        inputAnalysisGameRegime_1(possibleNumber)
                 
-                print(possibleNumberMessage + str(possibleNumber) + " ?")
-
-                inputAnalysisGameRegime_1(possibleNumber)
-                turnsCount += 1
-
+                else:
+                        print("Згідно ваших попередніх відповідей, ваше число: " + str(maxNumber))
+                        win()
+        
         elif gameRegime == "2":
                 playerGuess = input()
                 
@@ -106,22 +101,9 @@ while game:
                         inputAnalysisGameRegime_2(int(playerGuess), myNumber)
                         turnsCount += 1
                 
-                elif playerGuess == filename:
-                        print(filename)
-
-                elif playerGuess.lower() == exitCommand:
-                        game = False
-                
                 else:
-                        print(invalidInputMessage)
-
-        elif gameRegime == filename:
-                print(filename)
-                gameRegime = input()
-
-        elif gameRegime == exitCommand:
-                game = False
-
+                        commandCall(playerGuess)
+        
         else:
-                print(invalidInputMessage)
-                gameRegime = input()
+                commandCall(gameRegime)
+                if game: gameRegime = input()
